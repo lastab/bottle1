@@ -12,8 +12,9 @@ def getGlossory(word):
     
     sqlQuery="""SELECT 
                     w.word,
-                    g.gloss,
-                    w.ss_type 
+                    w.ss_type, 
+                    g.gloss
+                    
                 FROM 
                     wn_synset w, 
                     wn_gloss g 
@@ -24,17 +25,19 @@ def getGlossory(word):
     try:
         cursor.execute(sqlQuery)
         results=cursor.fetchall()
-        word=gloss=wtype=[]
+        wordMeanings=[]
+        
+        
         
         for row in results:
-            word.append(row[0])
-            gloss.append ( row[1])
-            wtype.append ( row[2])
+            wordMeaning=[]
+            wordMeaning.append(row[0])
+            wordMeaning.append ( row[1])
+            wordMeaning.append ( row[2])
+            wordMeanings.append(wordMeaning)
         db.close()
-        print "(%s) %s" % \
-        (wtype, gloss )
-
-        return ;
+        
+        return (wordMeanings);
     except:
         print "Error: unable to fetch data"
         db.close()
@@ -43,10 +46,14 @@ def getGlossory(word):
     
     
 
-results=getGlossory('rock')
-print "%s :" % 'test'
+'''wordMeanings=getGlossory('paper')
+# Now print fetched result
+print "%s :" % 'rock'
 
-      # Now print fetched result
+print " %s" % \
+        (wordMeanings )
+'''
+      
 
 
 '''
