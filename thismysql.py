@@ -21,7 +21,8 @@ def getGlossory(word):
                 WHERE 
                     w.synset_id=g.synset_id 
                         AND
-                    w.word='%s' """ % word
+                    w.word='%s'
+                ORDER BY w.ss_type""" % word
     try:
         cursor.execute(sqlQuery)
         results=cursor.fetchall()
