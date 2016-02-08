@@ -11,16 +11,16 @@ def getGlossory(word):
     cursor=db.cursor()
     
     sqlQuery="""SELECT 
+                    w.synset_id,
                     w.word,
                     w.ss_type, 
-                    g.gloss
-                    
+                    g.gloss,
+                    (SELECT GROUP_CONCAT(w1.word) FROM wn_similar s,wn_synset w1 where s.synset_id_2=w1.synset_id and s.synset_id_1=w.synset_id) as 'Similar',
+                    (SELECT GROUP_CONCAT(w1.word) FROM wn_antonym s,wn_synset w1 where s.synset_id_2=w1.synset_id and s.synset_id_1=w.synset_id) as 'Antonym',
+                    (SELECT GROUP_CONCAT(w1.word) FROM wn_see_also s,wn_synset w1 where s.synset_id_2=w1.synset_id and s.synset_id_1=w.synset_id) as 'see also'
                 FROM 
-                    wn_synset w, 
-                    wn_gloss g 
+                    wn_synset w JOIN wn_gloss g on w.synset_id=g.synset_id  
                 WHERE 
-                    w.synset_id=g.synset_id 
-                        AND
                     w.word='%s'
                 ORDER BY w.ss_type""" % word
     try:
@@ -33,8 +33,12 @@ def getGlossory(word):
         for row in results:
             wordMeaning=[]
             wordMeaning.append(row[0])
-            wordMeaning.append ( row[1])
             wordMeaning.append ( row[2])
+            wordMeaning.append ( row[3])
+             
+            wordMeaning.append ( row[4])
+            wordMeaning.append ( row[5])
+            wordMeaning.append ( row[6])
             wordMeanings.append(wordMeaning)
         db.close()
         
