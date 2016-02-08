@@ -1,7 +1,7 @@
 from PIL import Image
 import pytesseract
 from bottle import route, run, template, request
-from thismysql import getGlossory
+from thismysql import getGlossory, getRandomWord
 import json, base64
 
 
@@ -66,11 +66,25 @@ def wordMening():
     
     delimiter=", "
     for meaning in meanings:            
-        string.append('{\"type\": \"%s\",\"meaning\": \"%s\" },' % (meaning[1], meaning[2].replace('"', '\\"' )))
+        string.append('{\"type\": \"%s\",\"meaning\": \"%s\",\"similar\":\"%s\",\"antonym\":\"%s\",\"seealso\":\"%s\"},' % (meaning[1], meaning[2].replace('"', '\\"' ),meaning[3],meaning[4],meaning[5]))
         
    
     return string    
     
+
+
+@route('/random')
+def randomWord():
+    #word=request.forms.get('word')
+    #word='test'
+    
+    return getRandomWord()
+        
+   
+    
+
+
+
 
 
 run(host='0.0.0.0', port=8080, reloader=True)

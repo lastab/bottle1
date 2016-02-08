@@ -1,3 +1,4 @@
+from random import randint
 import MySQLdb
 
 def openDatabase():
@@ -5,6 +6,25 @@ def openDatabase():
     db=MySQLdb.connect("localhost","batsal","a","wn_pro_mysql")
     return db;
 
+
+def getRandomWord():
+    
+    db=openDatabase()
+    cursor=db.cursor()
+    num=randint(0,203147)
+    
+    sqlQuery="SELECT word FROM wn_synset LIMIT %s;" % num
+    cursor.execute(sqlQuery)
+    results=cursor.fetchall()
+    db.close()
+    word= str(results[-1][0]).replace("_"," ")
+    return word
+    #except:
+     #   print "Error: unable to fetch data"
+      #  db.close()
+       # return ;
+        
+    
 
 def getGlossory(word):
     db=openDatabase()
@@ -35,7 +55,6 @@ def getGlossory(word):
             wordMeaning.append(row[0])
             wordMeaning.append ( row[2])
             wordMeaning.append ( row[3])
-             
             wordMeaning.append ( row[4])
             wordMeaning.append ( row[5])
             wordMeaning.append ( row[6])
