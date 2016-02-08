@@ -22,7 +22,7 @@ def getGlossory(word):
                     wn_synset w JOIN wn_gloss g on w.synset_id=g.synset_id  
                 WHERE 
                     w.word='%s'
-                ORDER BY w.ss_type""" % word
+                ORDER BY w.ss_type""" % word.replace(" ","_")
     try:
         cursor.execute(sqlQuery)
         results=cursor.fetchall()
